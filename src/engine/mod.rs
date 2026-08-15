@@ -27,8 +27,13 @@ impl TgnnEngine {
             }
 
             let edges = graph.get_edges(curr_node);
-            for edge in edges {
-                if edge.timestamp > curr_time && (edge.timestamp - start_time) <= self.time_window_ms {
+            
+            for edge in edges.iter().rev() {
+                if edge.timestamp <= curr_time {
+                    break;
+                }
+                
+                if (edge.timestamp - start_time) <= self.time_window_ms {
                     stack.push((edge.dst, depth + 1, edge.timestamp));
                 }
             }
